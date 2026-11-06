@@ -1,3 +1,28 @@
+# NHDL — Mô tả phần cứng tam phân trên VHDL-2008
+
+**Chiến lược A · nguyên mẫu 0.1 · Long Ngo**
+
+[NHDL source](nhdl/) · [Đặc tả kỹ thuật](nhdl/docs/SPEC.md) · [Trang tương tác](https://xulytiengviet.github.io/nhdl/) · [Kiểm thử](../../actions/workflows/nhdl.yml)
+
+NHDL bổ sung kiểu trit N/O/P/X, số học có carry, mux, ALU, thanh ghi và mã ID Base27.
+CVNSS4.0/BilaScript/TinyLLM/TinyBila là các lớp tích hợp được đặc tả, chưa có compiler/model tích hợp.
+
+```sh
+# Cài GHDL, Make; từ gốc repository:
+make -C nhdl test
+make -C nhdl synth
+gtkwave nhdl/build/timing.ghw
+```
+
+Trang web tại `nhdl/site/` chạy trực tiếp bằng trình duyệt, không cần npm.
+Demo JavaScript minh họa số học, không thực thi VHDL trong trình duyệt.
+Workflow `NHDL verify and publish` kiểm thử trước khi phát hành GitHub Pages.
+Nếu Pages chưa bật, chọn Settings → Pages → Source: GitHub Actions rồi chạy lại workflow.
+
+Giữ nguyên mã và giấy phép GHDL bên dưới; phần NHDL xem [NOTICE](nhdl/NOTICE.md).
+
+---
+
 <p align="center">
   <img src="./doc/_static/logo.png"/>
 </p>

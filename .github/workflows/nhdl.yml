@@ -1,0 +1,43 @@
+name: NHDL verify and publish
+on:
+  push:
+    branches: [master]
+    paths: ['nhdl/**', '.github/workflows/nhdl.yml']
+  pull_request:
+    paths: ['nhdl/**', '.github/workflows/nhdl.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nhdl-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ghdl
+      - run: make -C nhdl synth
+      - run: node --test nhdl/tests/web.test.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nhdl-simulation
+          path: nhdl/build/
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: nhdl/site
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: verify
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - uses: actions/deploy-pages@v4
+        id: deployment

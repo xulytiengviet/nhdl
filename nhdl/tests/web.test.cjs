@@ -1,0 +1,3 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const m=require('../site/model.js');
+test('full adder: every valid and error combination',()=>{for(const a of [-1,0,1,'X'])for(const b of [-1,0,1,'X'])for(const c of [-1,0,1,'X']){const r=m.add(a,b,c);if([a,b,c].includes('X'))assert.deepEqual(r,{s:'X',carry:'X'});else {assert.equal(r.s+3*r.carry,a+b+c);assert.ok(m.valid(r.s)&&m.valid(r.carry));}}});
+test('Base27 mapping: all 27 values and invalid boundaries',()=>{const seen=new Set;for(let id=0;id<27;id++){const t=m.triad(id);assert.equal(t[0]*9+t[1]*3+t[2],id-13);assert.ok(t.every(m.valid));seen.add(t.join(','));}assert.equal(seen.size,27);for(const id of [-1,27,1.5,NaN])assert.throws(()=>m.triad(id),RangeError);});
