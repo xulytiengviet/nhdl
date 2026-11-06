@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Rebuild public language reading views
+        run: python3 nhdl/tools/build_languages.py
+      - run: python3 nhdl/tests/test_languages.py
       - run: sudo apt-get update && sudo apt-get install -y ghdl
       - run: make -C nhdl synth
       - run: make -C nhdl state

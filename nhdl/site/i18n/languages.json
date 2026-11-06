@@ -1,0 +1,19 @@
+[
+ {"code":"vi","flag":"🇻🇳","name":"Tiếng Việt","native":"Tiếng Việt"},
+ {"code":"en","flag":"🇬🇧","name":"Tiếng Anh","native":"English"},
+ {"code":"ru","flag":"🇷🇺","name":"Tiếng Nga","native":"Русский"},
+ {"code":"zh-CN","flag":"🇨🇳","name":"Tiếng Trung giản thể","native":"中文"},
+ {"code":"km","flag":"🇰🇭","name":"Tiếng Khmer — Campuchia","native":"ខ្មែរ"},
+ {"code":"fr","flag":"🇫🇷","name":"Tiếng Pháp","native":"Français"},
+ {"code":"de","flag":"🇩🇪","name":"Tiếng Đức","native":"Deutsch"},
+ {"code":"it","flag":"🇮🇹","name":"Tiếng Ý","native":"Italiano"},
+ {"code":"es","flag":"🇪🇸","name":"Tiếng Tây Ban Nha","native":"Español"},
+ {"code":"pt","flag":"🇵🇹","name":"Tiếng Bồ Đào Nha","native":"Português"},
+ {"code":"ja","flag":"🇯🇵","name":"Tiếng Nhật","native":"日本語"},
+ {"code":"ko","flag":"🇰🇷","name":"Tiếng Hàn","native":"한국어"},
+ {"code":"th","flag":"🇹🇭","name":"Tiếng Thái","native":"ไทย"},
+ {"code":"id","flag":"🇮🇩","name":"Tiếng Indonesia","native":"Bahasa Indonesia"},
+ {"code":"hi","flag":"🇮🇳","name":"Tiếng Hindi — Ấn Độ","native":"हिन्दी"},
+ {"code":"ar","flag":"🇸🇦","name":"Tiếng Ả Rập","native":"العربية"},
+ {"code":"sv","flag":"🇸🇪","name":"Tiếng Thụy Điển","native":"Svenska"}
+]

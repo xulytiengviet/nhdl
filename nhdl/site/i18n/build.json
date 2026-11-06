@@ -1,0 +1,40 @@
+{
+  "schema": "nhdl-language-build/1.0.0",
+  "sourceLanguage": "vi",
+  "mode": "external-machine-translation-on-demand",
+  "provider": "Google Translate",
+  "languages": [
+    "vi",
+    "en",
+    "ru",
+    "zh-CN",
+    "km",
+    "fr",
+    "de",
+    "it",
+    "es",
+    "pt",
+    "ja",
+    "ko",
+    "th",
+    "id",
+    "hi",
+    "ar",
+    "sv"
+  ],
+  "sourceRevision": "3564330427ce7b5327bdd4f3f7ad8fb9176db186d0e6859b9a405f1c4cc9300a",
+  "sourceHashes": {
+    "index.html": "928f09cff1981122b3102f14ca5c5f46a062ad07104a2ed44a093ce2b68ee94c",
+    "studio.html": "269c04d079f43e43a489aa78f8f2cbbd0f59511e1743ec898ebaaaf60fa4e1bd",
+    "challenges.html": "e4f61028fbe74217d94a8f04ccc3df9332b23a96fba4f3de4b2e4f1bb9888b77",
+    "challenges.json": "f8fd3327ad16e1d9f408de85aa9cd9f2d605ca25c37513d5da8147626e464948",
+    "languages.json": "d1bfd6be9fe8c92107a3b85c8ee0b5548091bd004931a21bc06a7fc5afc3e9b8",
+    "build_languages.py": "01fc5c3c7dd17644568e05afc8dfb0a9cb8c10c112ce2dd9d8a962caad7c77eb"
+  },
+  "pages": [
+    "index.html",
+    "studio.html",
+    "challenges.html"
+  ],
+  "humanReviewed": false
+}
