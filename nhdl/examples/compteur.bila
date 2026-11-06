@@ -1,0 +1,5 @@
+---bila:strict---
+// @nhdl clocked reset=O
+haml_sob dem(q: trit): trit {
+  trov_ved inc(q);
+}

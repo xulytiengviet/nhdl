@@ -1,3 +1,5 @@
+> Cập nhật 0.5: [SPEC.md](SPEC.md) là đặc tả hiện hành; đã thêm profile clocked và target Basys 3. Nội dung dưới đây ghi phạm vi nền tảng trước mở rộng này.
+
 # NHDL 0.2 — BilaScript frontend và VHDL backend
 
 **Luồng demo:** [SPEC.md](SPEC.md) 0.4 chốt BilaScript là frontend dựa trên CVNSS4.0. Lexer/parser BilaScript tạo AST; compiler NHDL kiểm tra profile và sinh VHDL-2008 với nhdl_ternary. CLI nhdlc.mjs và Studio dùng chung module compile. Adapter văn bản/Base27 là tiện ích riêng, không bắt buộc cho biên dịch.

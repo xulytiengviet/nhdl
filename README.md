@@ -1,3 +1,7 @@
+# Neutral HDL 0.5 — CVNSS4.0 → mạch có trạng thái
+
+BilaScript frontend → VHDL-2008 + nhdl_ternary → GHDL → target Basys 3. [Đặc tả](nhdl/docs/SPEC.md) · [Quy trình board](nhdl/boards/basys3/README.md). Chạy `make -C nhdl state`. GHDL đã kiểm chứng; Vivado và board vật lý chưa chạy.
+
 # NHDL — BilaScript (CVNSS4.0) → VHDL-2008
 
 **Đặc tả demo 0.4 · Studio/backend 0.2 · Core RTL 0.1 · Long Ngo**

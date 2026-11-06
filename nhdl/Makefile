@@ -13,3 +13,11 @@ synth: test
 	$(GHDL) --synth --std=08 --workdir=$(BUILD) trit_register > $(BUILD)/trit_register_netlist.vhd
 clean:
 	rm -rf $(BUILD)
+
+.PHONY: state
+state:
+	GHDL=$(GHDL) node tools/nhdlc.mjs examples/compteur.bila --out build/counter --verify
+	$(GHDL) -a --std=08 --workdir=$(BUILD) rtl/nhdl_ternary.vhd build/counter/generated.vhd boards/basys3/top.vhd tests/tb_counter.vhd
+	$(GHDL) -e --std=08 --workdir=$(BUILD) tb_counter
+	$(GHDL) -r --std=08 --workdir=$(BUILD) tb_counter --assert-level=error --wave=$(BUILD)/counter.ghw
+	$(GHDL) --synth --std=08 --workdir=$(BUILD) nhdl_basys3 > $(BUILD)/basys3_netlist.vhd

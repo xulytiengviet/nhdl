@@ -1,3 +1,5 @@
+> Cập nhật 0.5: [SPEC.md](SPEC.md) là đặc tả hiện hành; đã thêm profile clocked và target Basys 3. Nội dung dưới đây ghi phạm vi nền tảng trước mở rộng này.
+
 # Báo cáo kiểm chứng NHDL 0.1
 
 Ngày 06-11-2026. Môi trường Linux, GHDL 4.1.0 mcode, VHDL-2008.
