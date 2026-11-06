@@ -1,3 +1,4 @@
+import {examples} from './examples.mjs';
 import {ALPHABET,triad,encodeVietnamese,decodeFrames,selectCandidate} from './adapter.mjs';
 import {compile,assistantRequest} from './frontend.mjs';
 const $=id=>document.getElementById(id);let packet=null,compiled=null;
@@ -11,4 +12,5 @@ $('compile').addEventListener('click',runCompile);$('artifact').addEventListener
 $('bila-source').addEventListener('input',()=>{compiled=null;$('compiled').textContent='';$('download-artifact').disabled=true;$('download-source').disabled=true;$('compile-status').textContent='Mã đã đổi; cần biên dịch lại.';});
 for(const id of ['vi-source','vi-mode'])$(id).addEventListener('input',()=>{packet=null;$('save-packet').disabled=true;$('candidates').replaceChildren();$('vi-output').textContent='';$('vi-status').textContent='Đầu vào đã đổi; cần chuyển lại.';});
 $('request').addEventListener('click',()=>{try{download('nhdl-assistant-request.json',assistantRequest($('assistant-prompt').value));$('assistant-status').textContent='Đã tạo yêu cầu. Inference: NOT_CONNECTED; chưa gửi tới model.';}catch(e){$('assistant-status').textContent=e.message;}});
+$('demo-example').addEventListener('change',()=>{$('bila-source').value=examples[$('demo-example').value];$('artifact').value='vhdl';runCompile();});
 convert();runCompile();

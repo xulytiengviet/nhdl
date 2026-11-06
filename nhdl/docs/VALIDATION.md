@@ -31,3 +31,10 @@ Các artifact build được tạo lại bằng Make và được CI lưu riêng
 - Giao diện desktop: oracle hiển thị, chọn nghĩa ses→sẽ, E_TYPE dòng/cột,
   xóa đầu ra cũ khi nguồn đổi, sinh lại VHDL/source map đều được kiểm tra.
 - Chưa nối model inference; không có benchmark FPGA hoặc ngữ nghĩa tự nhiên.
+
+## Demo frontend BilaScript — đặc tả 0.4
+Bốn ví dụ chọn nhanh được biên dịch bằng compiler dùng chung và chạy qua
+GHDL simulation/synthesis: cộng 16 vector, nhân 16, STI 4, mux 64 (đều gồm X),
+tất cả PASS. Bộ kiểm thử Node 11 nhóm PASS. Kiểm tra HTML: ID duy nhất, script
+tồn tại, demo đứng trước adapter. Chưa xác nhận trực quan bản bố cục mới do
+trình xem thử hết thời gian chờ. Core/compiler không thay đổi ngữ nghĩa.

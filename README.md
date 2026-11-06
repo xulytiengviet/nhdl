@@ -1,10 +1,11 @@
-# NHDL — Frontend CVNSS4.0 · Backend FPGA
+# NHDL — BilaScript (CVNSS4.0) → VHDL-2008
 
-**Kiến trúc 0.3 · Studio/backend 0.2 · Core RTL 0.1 · Long Ngo**
+**Đặc tả demo 0.4 · Studio/backend 0.2 · Core RTL 0.1 · Long Ngo**
 
 [NHDL source](nhdl/) · [Đặc tả kỹ thuật](nhdl/docs/SPEC.md) · [Trang tương tác](https://xulytiengviet.github.io/nhdl/) · [Kiểm thử](https://github.com/xulytiengviet/nhdl/actions/workflows/nhdl.yml)
 
-**CVNSS4.0 là frontend ngôn ngữ nguồn của NHDL. Mọi tầng xử lý phía sau thuộc backend:** adapter, parser BilaScript, AST/kiểu, codec Base27, sinh VHDL, GHDL, công cụ FPGA và AI hỗ trợ. VHDL là RTL trung gian; mục tiêu triển khai là FPGA. Hiện đã có tập con tổ hợp trit, chưa có target/constraints/place-and-route/bitstream được tích hợp.
+**Demo nhanh: dùng BilaScript làm frontend dựa trên CVNSS4.0.** Viết nguồn `.bila` → `nhdlc.mjs` phân tích/kiểm tra profile trit → sinh VHDL-2008 dùng `nhdl_ternary` → GHDL. Studio dùng cùng compiler và hiển thị nguồn BilaScript bên trái, VHDL sinh ra bên phải. FPGA là bước triển khai tiếp theo, chưa có bitstream được xác nhận.
+
 [Studio 0.2](https://xulytiengviet.github.io/nhdl/studio.html) đã có adapter CVNSS4.0 có phiên bản và ứng viên giải mã; backend dùng parser BilaScript v4 xuất VHDL/source map/testbench cho profile RTL kiểu trit. TinyLLM có hồ sơ yêu cầu và cổng kiểm chứng CLI, chưa nối inference; TinyBila chưa nối runtime.
 
 [Đặc tả tích hợp](nhdl/docs/BRIDGE.md) · [Nguồn và hash](nhdl/docs/PROVENANCE.json)

@@ -1,31 +1,34 @@
-# NHDL — Đặc tả frontend CVNSS4.0 và backend FPGA
+# NHDL — BilaScript frontend (CVNSS4.0) → VHDL-2008
 
-**Đặc tả kiến trúc 0.3 · Hiện thực Studio/backend 0.2 · Core RTL 0.1**
+**Đặc tả luồng demo 0.4 · Hiện thực Studio/backend 0.2 · Core RTL 0.1**
 Chủ dự án: Dai‑Long Ngo‑Hoàng (Long Ngo). Chiến lược A: tái sử dụng VHDL-2008 và công cụ FPGA.
 
-## 1. Định nghĩa và ranh giới kiến trúc
+## 1. Mục tiêu: demo nhanh trên luồng NHDL hiện có
 
-**NHDL là ngôn ngữ mô tả phần cứng có frontend dựa trên CVNSS4.0, hướng tới triển khai mạch tam phân cân bằng trên FPGA. Mọi thành phần xử lý phía sau frontend đều thuộc backend NHDL.**
+**Sử dụng BilaScript làm frontend; CVNSS4.0 là nền tảng từ vựng/cú pháp của frontend đó. NHDL biên dịch tập con phần cứng BilaScript sang VHDL-2008, dùng thư viện `nhdl_ternary` để hiện thực phép toán trit.**
 
-Frontend là lớp ngôn ngữ mà người thiết kế sử dụng: từ vựng CVNSS4.0, cú pháp mô tả mạch, kiểu dữ liệu, quy tắc ngữ nghĩa và thông báo liên hệ về mã nguồn. Backend tiếp nhận mô tả ấy, phân tích/kiểm tra, hạ xuống biểu diễn phần cứng, sinh RTL, kiểm chứng, tổng hợp và tạo sản phẩm cho FPGA.
+Luồng demo: **BilaScript (cú pháp CVNSS4.0) → phân tích/kiểm tra kiểu → sinh VHDL-2008 + nhdl_ternary → GHDL → công cụ FPGA.** Người dùng viết BilaScript thay cho VHDL; Studio trình bày hai khung song song: nguồn BilaScript bên trái, VHDL được sinh ra bên phải. Trên màn hình hẹp hai khung xếp dọc để dễ đọc.
 
-Đây là **ranh giới kiến trúc sản phẩm NHDL**. Trong thuật ngữ nội bộ của công cụ biên dịch, lexer/parser có thể được gọi là compiler frontend; trong tài liệu này các công cụ thực thi đó nằm phía backend NHDL. BilaScript là công nghệ parser/backend được tái sử dụng, không phải một frontend sản phẩm thứ hai cạnh CVNSS4.0. VHDL là định dạng RTL của backend, không phải ngôn ngữ nguồn bắt buộc người dùng phải viết.
+CVNSS4.0 không được tách thành một compiler frontend độc lập với BilaScript. Frontend ngôn ngữ dùng lexer/parser và vocabulary BilaScript v4; backend NHDL kiểm tra profile RTL và hạ mã sang VHDL. `nhdlc.mjs` là CLI điều phối toàn luồng, gọi module biên dịch dùng chung với Studio. Trình duyệt không chạy file CLI Node.js, nhưng sử dụng cùng hàm `compile` trong `site/bridge/frontend.mjs`.
 
-CVNSS4.0 cung cấp lớp biểu đạt; tự nó chưa quy định clock, reset, cổng hoặc mạch. **Ngữ nghĩa phần cứng được quy định bởi profile NHDL**, không suy ra từ việc rút gọn tiếng Việt. Quốc ngữ tự do hoặc văn bản CVNSS bất kỳ chưa phải thiết kế tổng hợp được.
+| Thành phần | Vai trò trong demo |
+|---|---|
+| CVNSS4.0 | Nền tảng từ vựng và cách biểu đạt của BilaScript |
+| BilaScript frontend | Nguồn `.bila`, lexer/parser, AST và vị trí nguồn |
+| NHDL compiler | Kiểm tra tập con kiểu trit; sinh RTL/source map/testbench |
+| VHDL-2008 + nhdl_ternary | Đầu ra backend và thư viện số học/logic tam phân |
+| GHDL | Phân tích, mô phỏng và kiểm tra tổng hợp trung gian |
+| Toolchain FPGA | Mapping, place-and-route, timing và bitstream; chưa tích hợp target |
+| Adapter văn bản/Base27 | Tiện ích bổ sung; không phải bước bắt buộc trước biên dịch |
+| TinyLLM/TinyBila | Hỗ trợ đề xuất/điều phối tùy chọn; chưa nối inference |
 
-| Ranh giới | Thành phần | Trách nhiệm |
-|---|---|---|
-| Frontend duy nhất | Ngôn ngữ nguồn NHDL dựa CVNSS4.0 | Người dùng viết và đọc mô tả phần cứng |
-| Backend ngôn ngữ | Oracle/adapter, lexer/parser BilaScript, kiểm tra kiểu/ngữ nghĩa | Chuẩn hóa, kiểm toán ứng viên, tạo AST và báo lỗi |
-| Backend biểu diễn | Base27/trit codec, AST, IR phần cứng | Biểu diễn dữ liệu và hạ mô tả; IR độc lập còn là mục tiêu |
-| Backend RTL | Bộ sinh VHDL-2008 và nhdl_ternary | Hiện thực mạch theo ngữ nghĩa đã chốt |
-| Backend kiểm chứng | GHDL, testbench, waveform, báo cáo hash | Kiểm tra hành vi và truy vết kết quả |
-| Backend FPGA | Synthesis, mapping, place-and-route, timing, bitstream, nạp board | Triển khai cho thiết bị cụ thể; chưa tích hợp đầy đủ |
-| Backend hỗ trợ tùy chọn | TinyLLM/TinyBila | Đề xuất mã/test, điều phối; không quyết định ngữ nghĩa ngôn ngữ |
+Mục tiêu trước mắt là demo được bằng mã đang có, tái sử dụng parser và luồng biên dịch NHDL. Chỉ tập con phần cứng được hỗ trợ; không tuyên bố mọi chương trình BilaScript đều tổng hợp được.
 
-## 2. Frontend CVNSS4.0: hợp đồng nguồn
+## 2. Viết BilaScript, xem VHDL sinh ra
 
-Nguồn phải chứa mã theo grammar/profile NHDL. Bản hiện thực 0.2 dùng phần từ vựng CVNSS4.0 của BilaScript v4, cú pháp có cấu trúc và chú thích kiểu `trit`.
+Mở Studio, chọn ví dụ hoặc sửa khung trái, bấm **Biên dịch → VHDL-2008**. Khung phải hiển thị kết quả thật từ compiler. Có thể chọn xem testbench/source map và tải artifact.
+
+### Nguồn frontend: BilaScript dựa trên CVNSS4.0
 
 ```javascript
 ---bila:strict---
@@ -34,7 +37,24 @@ haml_sob tong(a: trit, b: trit): trit {
 }
 ```
 
-Đoạn trên **đã biên dịch được** bằng backend hiện có. `haml_sob` khai báo hàm; `trov_ved` trả biểu thức; tên người dùng như `tong` được giữ để chẩn đoán. `trit`, N/O/P/X và tên cổng là ký hiệu kỹ thuật của profile; không tự đổi sang bí danh CVNSS chưa được chốt. Chỉ thị `---bila:strict---` và đuôi `.bila` là định dạng tương thích hiện có; chưa có lexer riêng cho `.nhdl` hoặc chỉ thị `---nhdl---`.
+`haml_sob` khai báo hàm, `trov_ved` trả biểu thức. `trit` và N/O/P/X là ký hiệu kỹ thuật được profile hỗ trợ. Giữ chỉ thị và phần mở rộng hiện có để tái sử dụng parser.
+
+### Đầu ra backend: VHDL-2008 hợp lệ
+
+```vhdl
+use work.nhdl_ternary.all;
+entity generated is
+  port(p0, p1 : in FakeTrit; y : out FakeTrit);
+end;
+architecture rtl of generated is
+begin
+  y <= (p0 + p1);
+end;
+```
+
+Đây là đầu ra của ví dụ trên, không phải đoạn VHDL dựng sẵn để giả lập compiler. Các tên cổng được đổi thành p0/p1 và truy vết về nguồn bằng mapping/source map. `+` gọi ngữ nghĩa một trit của `nhdl_ternary`: P+P=N theo modulo cân bằng 3, không phải tổng có carry.
+
+**“Hiển thị cú pháp CVNSS4.0 dựa trên VHDL-2008” trong demo này nghĩa là hiển thị nguồn BilaScript mang từ vựng CVNSS4.0 cạnh VHDL backend tương ứng.** Nó không có nghĩa chỉ đổi màu/nhãn VHDL, hoặc dịch ngược tùy ý một tệp VHDL thành BilaScript.
 
 ### 2.1 Tập con được hỗ trợ
 
@@ -90,7 +110,7 @@ ID 0..26 ↔ giá trị cân bằng ID−13 ↔ ba trit cao→thấp. Cờ case 
 
 JSON framing chưa là giao thức bus hay khối RTL Unicode; chưa có bộ nạp ROM từ packet. Ba trit có 27 giá trị; điều này không có nghĩa mọi token lập trình/model đều nằm trong 27 ký hiệu, hay FPGA tiết kiệm năng lượng chỉ nhờ đổi bảng mã.
 
-## 5. Backend biên dịch và kiểm chứng hiện có
+## 5. Frontend BilaScript và backend NHDL hiện có
 
 BilaScript v4 lexer/parser/vocabulary được vendored có commit và MIT LICENSE. Backend kiểm tra AST theo profile `nhdl-bila-rtl/0.2.0`, sinh entity `generated`, cổng p0..p2 và output y. Ánh xạ tên nguồn giữ trong kết quả; source map v3 lưu sourcesContent và vị trí khai báo/câu trả về. Chưa có tệp IR phần cứng độc lập; hiện backend hạ trực tiếp AST đã kiểm tra thành VHDL.
 
@@ -151,7 +171,7 @@ Hiện có hồ sơ `nhdl-assistant-request/1.0.0`, profile và ràng buộc sin
 | B5 — mapping/place-and-route/timing | Chưa tích hợp target FPGA |
 | B6 — bitstream/nạp board/đo KPI | Chưa thực hiện |
 
-Đặc tả kiến trúc 0.3 đổi cách tổ chức khái niệm; không tự nâng phiên bản API backend 0.2 hoặc core 0.1. Các yêu cầu FPGA ở mục 6 chỉ được đánh dấu đạt sau khi có artifact và bằng chứng thực thi.
+Đặc tả luồng demo 0.4 đổi cách tổ chức khái niệm; không tự nâng phiên bản API backend 0.2 hoặc core 0.1. Các yêu cầu FPGA ở mục 6 chỉ được đánh dấu đạt sau khi có artifact và bằng chứng thực thi.
 
 ## 9. Tái lập và nguồn
 
