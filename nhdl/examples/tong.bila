@@ -1,0 +1,4 @@
+---bila:strict---
+haml_sob tong(a: trit, b: trit): trit {
+  trov_ved a + b;
+}

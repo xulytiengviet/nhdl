@@ -19,3 +19,15 @@ Không có đo LUT/FF/Fmax/power; không có place-and-route FPGA, ASIC, model
 inference hay compiler BilaScript. Chưa kiểm tra trực quan trên thiết bị di động.
 Synthesis frontend không tương đương chứng nhận khả năng tổng hợp trên mọi vendor.
 Các artifact build được tạo lại bằng Make và được CI lưu riêng, không đưa vào git.
+
+## Cập nhật tích hợp 0.2 — 06-11-2026
+- Oracle đính kèm nguyên bản: 23/23 self-test đạt.
+- Node: 11 nhóm kiểm thử đạt (core web + adapter/frontend).
+- Adapter: 27 ID, Unicode/emoji/case/NFC, các mã va chạm, lựa chọn ứng viên,
+  từ chối schema sai và frame không nhất quán.
+- Backend: kiểm tra kiểu/tên/arity/profile; source map chứa nguồn và vị trí;
+  8 biểu thức mẫu (cộng, trừ, mux, cmp, STI×, INC/DEC, min, max), mỗi mẫu 16
+  tổ hợp gồm X, đều đạt GHDL analyze/elaborate/simulation/synthesis frontend.
+- Giao diện desktop: oracle hiển thị, chọn nghĩa ses→sẽ, E_TYPE dòng/cột,
+  xóa đầu ra cũ khi nguồn đổi, sinh lại VHDL/source map đều được kiểm tra.
+- Chưa nối model inference; không có benchmark FPGA hoặc ngữ nghĩa tự nhiên.

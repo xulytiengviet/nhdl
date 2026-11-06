@@ -1,4 +1,6 @@
-# NHDL 0.1 — Đặc tả kỹ thuật
+# NHDL — Đặc tả core 0.1 và tích hợp 0.2
+
+**Cập nhật 0.2:** adapter và backend BilaScript RTL đã được hiện thực, xem [BRIDGE.md](BRIDGE.md). Các mục 5–6 bên dưới ghi lại định hướng ban đầu; trạng thái tích hợp hiện tại do BRIDGE.md quy định. Core VHDL giữ API 0.1.
 
 Ngày: 06-11-2026 · Chủ dự án: Dai‑Long Ngo‑Hoàng (Long Ngo).
 Trạng thái: nguyên mẫu tham chiếu, chiến lược A.

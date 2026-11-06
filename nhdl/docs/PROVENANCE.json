@@ -1,0 +1,33 @@
+{
+  "schema": "nhdl-provenance/1.0.0",
+  "date": "2026-11-06",
+  "oracle": {
+    "version": "5.0.0-audit-safe",
+    "uploadedName": "cvnss4_0_converter.pro.v5_0.audit_safe(20261106-004339).js",
+    "sha256": "8137cdf0949444f5e7cec215befc9391d768701c9dafc5f93adcf3d0e58ba708",
+    "license": "No explicit license header in supplied file; original header retained; not relicensed by NHDL"
+  },
+  "bilascript": {
+    "repository": "https://github.com/xulytiengviet/bilascript",
+    "commit": "8e27ec064c5d070e687e722eb1e3bdfdf4a85a62",
+    "component": "v4/src",
+    "version": "4.0.0",
+    "license": "MIT",
+    "files": {
+      "source-map.js": "fa5efad2dc3704409ff079dd85d757c1741e9734babdf44d5ce116235ffd2df6",
+      "vocabulary.js": "2da82b17e40c80f128a5b91cdb485915c762b79c4b952ff9e4fd36b10a51fe22",
+      "lexer.js": "b33c7704d0e882afc04f390e7b1a257e8d91edf23b1be2d36588cfee437ac652",
+      "parser.js": "1ee6ac717ad72cb646836fea80e3d96e622a17b9af15ee22877176f65acc6bd0"
+    }
+  },
+  "alphabet": {
+    "version": "tritlab-space-az/1.0.0",
+    "symbols": " ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "source": "https://xulytiengviet.github.io/trit/cvnss.html",
+    "snapshotSha256": "140799a657ddd6bf826642164903926e7b16f39c1e554b35a4da9e0480b7811b"
+  },
+  "tinyllm": {
+    "source": "https://xulytiengviet.github.io/TinyLLM_Vietnamese/",
+    "inference": "NOT_CONNECTED"
+  }
+}

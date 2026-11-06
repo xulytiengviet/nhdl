@@ -1,11 +1,18 @@
 # NHDL — Mô tả phần cứng tam phân trên VHDL-2008
 
-**Chiến lược A · nguyên mẫu 0.1 · Long Ngo**
+**Chiến lược A · nguyên mẫu 0.2 · Long Ngo**
 
-[NHDL source](nhdl/) · [Đặc tả kỹ thuật](nhdl/docs/SPEC.md) · [Trang tương tác](https://xulytiengviet.github.io/nhdl/) · [Kiểm thử](../../actions/workflows/nhdl.yml)
+[NHDL source](nhdl/) · [Đặc tả kỹ thuật](nhdl/docs/SPEC.md) · [Trang tương tác](https://xulytiengviet.github.io/nhdl/) · [Kiểm thử](https://github.com/xulytiengviet/nhdl/actions/workflows/nhdl.yml)
 
 NHDL bổ sung kiểu trit N/O/P/X, số học có carry, mux, ALU, thanh ghi và mã ID Base27.
-CVNSS4.0/BilaScript/TinyLLM/TinyBila là các lớp tích hợp được đặc tả, chưa có compiler/model tích hợp.
+[Studio 0.2](https://xulytiengviet.github.io/nhdl/studio.html) đã có adapter CVNSS4.0 có phiên bản và ứng viên giải mã; backend dùng parser BilaScript v4 xuất VHDL/source map/testbench cho profile RTL kiểu trit. TinyLLM có hồ sơ yêu cầu và cổng kiểm chứng CLI, chưa nối inference; TinyBila chưa nối runtime.
+
+[Đặc tả tích hợp](nhdl/docs/BRIDGE.md) · [Nguồn và hash](nhdl/docs/PROVENANCE.json)
+
+```sh
+node --test nhdl/tests/web.test.cjs nhdl/tests/bridge.test.mjs
+node nhdl/tools/nhdlc.mjs nhdl/examples/tong.bila --out nhdl/build/generated --verify
+```
 
 ```sh
 # Cài GHDL, Make; từ gốc repository:
