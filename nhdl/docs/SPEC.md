@@ -6,6 +6,133 @@ NHDL là phần mở rộng thư viện tam phân của VHDL-2008, kèm compiler
 
 Nguồn BilaScript/CVNSS4.0 → lexer/parser → kiểm tra kiểu → RTL VHDL-2008 + source map + testbench → GHDL → Vivado → Basys 3. Adapter văn bản/Base27 là tiện ích dữ liệu độc lập, không bắt buộc cho mọi chương trình. TinyLLM/TinyBila chỉ đề xuất mã; inference chưa kết nối, mã đề xuất vẫn phải qua compiler và kiểm chứng độc lập.
 
+
+## Lưu đồ kiến trúc NHDL
+
+### 1. Frontend, backend và các thành phần hỗ trợ
+
+```mermaid
+flowchart TD
+    Source["Nguồn BilaScript / CVNSS4.0"]
+    AI["TinyLLM / TinyBila: đề xuất mã"]
+    Entry["Studio hoặc CLI nhdlc.mjs"]
+    Parser["Lexer / parser BilaScript → AST"]
+    Check{"Kiểu trit và profile hợp lệ?"}
+    Error["Thông báo tiếng Việt: mã lỗi, dòng, cột"]
+    Lower["Hạ mã tổ hợp hoặc clocked"]
+    RTL["VHDL-2008"]
+    Artifacts["Source map v3 và testbench"]
+    Library["Thư viện nhdl_ternary"]
+    Verify["Kiểm chứng GHDL"]
+
+    AI -.->|Định hướng, inference chưa kết nối| Source
+    Source --> Entry --> Parser --> Check
+    Parser -->|Lỗi cú pháp| Error
+    Check -->|Không| Error
+    Error -->|Sửa nguồn| Source
+    Check -->|Có| Lower
+    Lower --> RTL
+    Lower --> Artifacts
+    RTL --> Verify
+    Artifacts -->|Testbench| Verify
+    Library --> Verify
+```
+
+Studio và CLI dùng chung module `site/bridge/frontend.mjs`. Studio sinh mã và kiểm tra tĩnh trong trình duyệt; CLI `nhdlc.mjs --verify` mới gọi GHDL. Source map hỗ trợ truy vết về nguồn, không phải đầu vào phần cứng. Cổng kiểm tra kiểu và profile áp dụng cả với mã do người viết lẫn mã trợ lý đề xuất.
+
+### 2. Adapter tiếng Việt và dữ liệu Base27
+
+```mermaid
+flowchart TD
+    Text["Văn bản tiếng Việt"]
+    Convert["Converter CVNSS4.0"]
+    Symbols["Bảng tritlab-space-az/1.0.0"]
+    Encode["Mã hóa khung triad hoặc Unicode fallback"]
+    Meta["Metadata: nguồn, hoa/thường, ứng viên giải mã"]
+    Packet["Hồ sơ JSON có phiên bản"]
+    Decode["Giải mã khung"]
+    Review{"Có từ mơ hồ?"}
+    Choice["Lưu lựa chọn của người dùng"]
+    Pending["Giữ NEEDS_REVIEW nếu chưa chọn"]
+    Ready["Dùng kết quả giải mã không mơ hồ"]
+
+    Text --> Convert
+    Convert --> Encode
+    Symbols --> Encode
+    Convert --> Meta
+    Encode --> Packet
+    Meta --> Packet
+    Packet --> Decode --> Review
+    Review -->|Có| Pending
+    Review -->|Không| Ready
+    Pending -->|Người dùng xác nhận| Choice
+    Choice -->|Cập nhật metadata| Packet
+```
+
+Adapter là nhánh xử lý dữ liệu độc lập với compiler. Giải mã khung khôi phục biểu diễn đã mã hóa; khôi phục nghĩa tiếng Việt cần metadata và xử lý mơ hồ. Bảng 27 ký hiệu không thay thế ngữ pháp BilaScript. Hiện chưa tự động nạp hồ sơ JSON này vào ROM hoặc bộ nhớ FPGA; muốn đưa văn bản lên board cần bổ sung định dạng dữ liệu và module phần cứng tương ứng.
+
+### 3. Mạch có trạng thái: quy tắc cập nhật thanh ghi
+
+```mermaid
+flowchart TD
+    Edge["Cạnh lên clk"]
+    Reset{"reset = 1?"}
+    Zero["Trạng thái kế tiếp = O"]
+    Enable{"enable = 1?"}
+    Next["Tính biểu thức từ trạng thái hiện tại"]
+    Hold["Giữ trạng thái hiện tại"]
+    Register["Cập nhật thanh ghi state"]
+    Output["y phản ánh state"]
+
+    Edge --> Reset
+    Reset -->|Có| Zero
+    Reset -->|Không| Enable
+    Enable -->|Có| Next
+    Enable -->|Không| Hold
+    Zero --> Register
+    Next --> Register
+    Hold --> Register
+    Register --> Output
+```
+
+Lưu đồ này mô tả profile `// @nhdl clocked reset=O`: reset đồng bộ có ưu tiên cao nhất. Với `inc(q)`, mỗi cạnh lên có enable cho chuỗi **O → P → N → O**. Không có cạnh lên thì thanh ghi không cập nhật. Việc gán signal và quan sát đầu ra vẫn tuân theo delta cycle của VHDL; đây chưa phải frontend FSM tổng quát.
+
+### 4. Các cổng kiểm chứng đến FPGA thật
+
+```mermaid
+flowchart TD
+    Inputs["RTL sinh ra, thư viện và testbench"]
+    Sim["GHDL analyze / elaborate / run"]
+    Oracle["Testbench độc lập và wrapper board"]
+    Gate{"Mô phỏng và kiểm tra độc lập đạt?"}
+    Fix["Sửa nguồn, compiler hoặc cấu hình"]
+    Synth["GHDL synth: netlist trung gian"]
+    Target["Wrapper Basys 3 và ràng buộc XDC"]
+    Vivado["Vivado: synthesis, place và route"]
+    Reports{"Timing, CDC và DRC được kiểm tra đạt?"}
+    Bit["Bitstream được duyệt"]
+    Board["Nạp Basys 3 và thử reset / enable / chuỗi LED"]
+    Evidence{"Có bằng chứng board chạy đúng?"}
+    Pass["Ghi nhận HARDWARE_PASS"]
+    Pending["NOT_RUN hoặc chưa đạt"]
+
+    Inputs --> Sim --> Gate
+    Oracle --> Gate
+    Gate -->|Không| Fix
+    Gate -->|Có| Synth
+    Synth -->|Kiểm tra trung gian đạt| Vivado
+    Inputs -->|RTL VHDL gốc| Vivado
+    Target --> Vivado --> Reports
+    Reports -->|Không| Fix
+    Reports -->|Có| Bit --> Board --> Evidence
+    Evidence -->|Có| Pass
+    Evidence -->|Chưa| Pending
+```
+
+Vivado đọc RTL VHDL gốc cùng thư viện và wrapper; không dùng netlist GHDL làm đầu vào trong script hiện tại. Script có cổng chặn setup slack âm; review hold, đường chưa ràng buộc, CDC và DRC vẫn cần được thực hiện trước khi nạp.
+
+**Trạng thái bản 0.5:** GHDL và kiểm thử độc lập của demo đã đạt; Vivado, timing trên FPGA và thử board thật vẫn **NOT_RUN**. Lưu đồ thể hiện quy trình nghiệm thu, không khẳng định các bước phần cứng đã chạy. Các báo cáo và hash nguồn/bitstream phải gắn với cùng phiên bản thử nghiệm.
+
 ## Dữ liệu và phép toán
 
 | Kiểu | Quy ước |
