@@ -19,7 +19,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ghdl
       - run: make -C nhdl synth
       - run: make -C nhdl state
-      - run: node --test nhdl/tests/web.test.cjs nhdl/tests/bridge.test.mjs nhdl/tests/state.test.mjs
+      - run: node --test nhdl/tests/web.test.cjs nhdl/tests/bridge.test.mjs nhdl/tests/state.test.mjs nhdl/tests/challenges.test.mjs
       - run: node nhdl/tools/nhdlc.mjs nhdl/examples/tong.bila --out nhdl/build/generated --verify
       - uses: actions/upload-artifact@v4
         with:

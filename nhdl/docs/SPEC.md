@@ -200,3 +200,7 @@ Không gộp các mục NOT_RUN thành PASS. CI không có FPGA. Đo T9 phải d
 Basys 3 / xc7a35tcpg236-1. Clock 100 MHz, clock enable 1 Hz, không tạo clock bằng LUT. Hai tầng đồng bộ nút reset và switch enable. Nút reset là mức giữ (không đếm cạnh nút); không có chức năng single-step vật lý chống dội. Nhấn giữ BTNC ≥0,1 s để reset, SW0 bật chạy/tắt giữ; LD2=O, LD0=P, LD1=N.
 
 Xem [quy trình board](../boards/basys3/README.md). Mốc “một board chạy đúng” chỉ hoàn thành khi lưu report timing/CDC/DRC, hash bitstream và quan sát board thật. Bản này chưa có Vivado hoặc board kết nối.
+
+## Danh mục bài toán nghiên cứu
+
+[400 bài toán kỹ thuật](https://xulytiengviet.github.io/nhdl/nhdl/site/challenges.html) mô tả sơ bộ bản chất và nút thắt tái lập, chia theo luồng nền tảng và mở rộng có điều kiện. Toàn bộ danh mục khởi tạo ở trạng thái chưa giải quyết; các kết quả demo PASS trong đặc tả không tự động đóng bài toán nghiên cứu. Xem [quy ước danh mục](CHALLENGES.md).
