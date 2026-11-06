@@ -1,4 +1,6 @@
-# NHDL Studio 0.2 — CVNSS4.0, BilaScript, TinyLLM
+# NHDL backend 0.2 — Triển khai cho frontend CVNSS4.0
+
+**Ranh giới kiến trúc:** [SPEC.md](SPEC.md) 0.3 quy định CVNSS4.0 là frontend duy nhất. Oracle/adapter, parser BilaScript, codegen, GHDL và TinyLLM/TinyBila đều là backend. Tên file frontend.mjs là tên module triển khai lịch sử, không tạo thêm frontend sản phẩm. Tài liệu này mô tả backend đã có, không tuyên bố pipeline FPGA hoàn chỉnh.
 
 ## Phần đã chạy được
 - `site/bridge/adapter.mjs`: oracle đính kèm 5.0.0-audit-safe, alphabet có phiên bản,
