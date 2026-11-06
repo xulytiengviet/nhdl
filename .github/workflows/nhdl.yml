@@ -2,9 +2,9 @@ name: NHDL verify and publish
 on:
   push:
     branches: [master]
-    paths: ['nhdl/**', '.github/workflows/nhdl.yml']
+    paths: ['nhdl/**', '.github/workflows/nhdl.yml', 'index.html', 'studio.html']
   pull_request:
-    paths: ['nhdl/**', '.github/workflows/nhdl.yml']
+    paths: ['nhdl/**', '.github/workflows/nhdl.yml', 'index.html', 'studio.html']
   workflow_dispatch:
 permissions:
   contents: read
@@ -24,10 +24,15 @@ jobs:
         with:
           name: nhdl-simulation
           path: nhdl/build/
+      - name: Stage stable Pages layout
+        run: |
+          mkdir -p nhdl/build/pages/nhdl
+          cp -R nhdl/site nhdl/build/pages/nhdl/site
+          cp index.html studio.html nhdl/build/pages/
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request'
         with:
-          path: nhdl/site
+          path: nhdl/build/pages
   deploy:
     if: github.event_name != 'pull_request'
     needs: verify

@@ -102,6 +102,6 @@ backend lưu trữ, localStorage tự động, model đang chạy hay upload ng�
 ## Tương thích cấu hình Pages
 Kho hiện có cả workflow NHDL và Pages từ master/root. Hai tệp index.html và
 studio.html ở gốc chuyển tới nhdl/site/ khi dùng Pages theo nhánh; workflow
-NHDL xuất trực tiếp nhdl/site và giữ cùng các URL vào. Nhờ vậy cả hai chế độ
+NHDL cũng đóng gói cùng cây nhdl/site và hai entrypoint ở gốc. Nhờ vậy cả hai chế độ
 đều mở đúng giao diện, không hiển thị README thay trang. Nên chọn Source:
 GitHub Actions trong Settings/Pages để chỉ còn một luồng phát hành.
